@@ -69,7 +69,11 @@ module.exports = class Device {
       console.log('already connected');
     }
     if (!this.peripheral) {
-      noble.startScanningAsync();
+      try {
+        noble.startScanningAsync();
+      } catch (e) {
+        console.log('Error starting scanning... need to wait');
+      }
       return;
     }
     console.log('[OK] this.perepheral is not null');
