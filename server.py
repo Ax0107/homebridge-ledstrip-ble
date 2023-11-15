@@ -10,7 +10,7 @@ app = FastAPI()
 
 class CBModel(BaseModel):
     color: str
-    brightness: str
+    brightness: int
     
 class SModel(BaseModel):
     status: bool
