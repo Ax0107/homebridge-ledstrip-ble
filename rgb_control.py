@@ -60,34 +60,32 @@ async def blink(color):
 
 
 async def connect():
-    while True:
-        print('[RGB] STARTING RGB CONTROL MODULE')
-        scanner = BleakScanner()
-        
-        # try:
-        print(f'[RGB] discovering...')
-        addresses = await scanner.discover(timeout=10)
-        address = None
-        for device in addresses:
-            print(device.address, device.name)
-            if device.name and 'ELK-BLEDOM' in device.name:
-                print('[RGB] DISCOVERED RGB-TAPE ELK-BLEDOM')
-                address = device.address
-                break
-        print(f'[RGB] Target address: {address}')
-        if address is None:
-            print('[RGB] No RGB-tape. Trying reconnect...')
-            continue
-        try:
-            CLIENT = BleakClient(address)
-            s = CLIENT.services
-            UU = s.get_characteristic(13)
-        except BleakDeviceNotFoundError:
-            print('Could not connect to RGB device. Retrying in 5 secs...')
-            traceback.print_exc(file=sys.stdout)
-            time.sleep(5)
-        except Exception as e:
-            print(f'Error: {e}')
-            traceback.print_exc(file=sys.stdout)
-            time.sleep(5)
+    print('[RGB] STARTING RGB CONTROL MODULE')
+    scanner = BleakScanner()
+    
+    # try:
+    print(f'[RGB] discovering...')
+    addresses = await scanner.discover(timeout=10)
+    address = None
+    for device in addresses:
+        print(device.address, device.name)
+        if device.name and 'ELK-BLEDOM' in device.name:
+            print('[RGB] DISCOVERED RGB-TAPE ELK-BLEDOM')
+            address = device.address
+            break
+    print(f'[RGB] Target address: {address}')
+    if address is None:
+        print('[RGB] No RGB-tape. Trying reconnect...')
+    try:
+        CLIENT = BleakClient(address)
+        s = CLIENT.services
+        UU = s.get_characteristic(13)
+    except BleakDeviceNotFoundError:
+        print('Could not connect to RGB device. Retrying in 5 secs...')
+        traceback.print_exc(file=sys.stdout)
+        time.sleep(5)
+    except Exception as e:
+        print(f'Error: {e}')
+        traceback.print_exc(file=sys.stdout)
+        time.sleep(5)
 

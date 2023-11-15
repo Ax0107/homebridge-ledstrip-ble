@@ -15,8 +15,6 @@ class CBModel(BaseModel):
 class SModel(BaseModel):
     status: bool
 
-Thread(target=run, args=(connect(),)).start()
-
 
 @app.post('/set/')
 async def set_color_and_brightness(data: CBModel):
