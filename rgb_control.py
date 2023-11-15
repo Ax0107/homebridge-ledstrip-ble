@@ -1,7 +1,6 @@
 import sys
 import time
 import traceback
-from typing import List
 
 import numpy as np
 from bleak import BleakScanner, BleakClient
@@ -10,7 +9,7 @@ import platform
 from bleak.exc import BleakDeviceNotFoundError, BleakDBusError
 
 
-CLIENT: List[BleakClient, None] = None
+CLIENT = None
 UU = None
 
 async def get_client_and_uu():
