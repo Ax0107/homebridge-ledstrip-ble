@@ -6,7 +6,7 @@ import numpy as np
 from bleak import BleakScanner, BleakClient
 import platform
 
-from bleak.exc import BleakDeviceNotFoundError
+from bleak.exc import BleakDeviceNotFoundError, BleakDBusError
 
 
 CLIENT = None
@@ -14,7 +14,10 @@ UU = None
 
 async def get_client_and_uu():
     while CLIENT is None or UU is None:
-        await connect()
+        try:
+            await connect()
+        except BleakDBusError:
+            print('Already in progress...')
     return CLIENT, UU
 
 # ELK-BLEDOM
@@ -25,17 +28,23 @@ else:
 
 async def power_on():
     client, uu = await get_client_and_uu()
+    if not (client and uu):
+        return
     value = bytes([0x7e, 0x00, 0x04, 0xf0, 0x00, 0x01, 0xff, 0x00, 0xef])
     await client.write_gatt_char(uu, value, response=False)
 
 async def power_off():
     client, uu = await get_client_and_uu()
+    if not (client and uu):
+        return
     value = bytes([0x7e, 0x00, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00, 0xef])
     await client.write_gatt_char(uu, value, response=False)
 
 
 async def set_color(color):
     client, uu = await get_client_and_uu()
+    if not (client and uu):
+        return
     await power_on(client, uu)
     value = bytes([0x7e, 0x00, 0x05, 0x03, color[0], color[1], color[2], 0x00, 0xef])
     await client.write_gatt_char(uu, value, response=False)
@@ -43,6 +52,8 @@ async def set_color(color):
 
 async def set_brightness(value):
     client, uu = await get_client_and_uu()
+    if not (client and uu):
+        return
     await power_on(client, uu)
     value = bytes([0x7e, 0x00, 0x01, value, 0x00, 0x00, 0x00, 0x00, 0xef])
     await client.write_gatt_char(UU, value, response=False)
@@ -50,6 +61,8 @@ async def set_brightness(value):
 
 async def blink(color):
     client, uu = await get_client_and_uu()
+    if not (client and uu):
+        return
     await set_color(color, client, uu)
     time.sleep(1)
     for _ in range(3):
