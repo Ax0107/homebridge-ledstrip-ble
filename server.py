@@ -4,27 +4,34 @@ from rgb_control import *
 from threading import Thread
 from asyncio import run
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
+class CBModel(BaseModel):
+    color: str
+    brightness: str
+    
+class SModel(BaseModel):
+    status: bool
 
 Thread(target=run, args=(connect(),)).start()
 
 
 @app.post('/set/')
-async def set_color_and_brightness(color: str, brightness: str):
+async def set_color_and_brightness(data: CBModel):
     
-    print(color, brightness)
-    await set_color(color)
-    await set_brightness(brightness)
+    print(data.color, data.brightness)
+    await set_color(data.color)
+    await set_brightness(data.brightness)
     return {'status': 'ok'}
 
 
 @app.post('/set_state/')
-async def set_state(status: bool):
+async def set_state(data: SModel):
     
-    print('status:', status)
-    if status:
+    print('status:', data.status)
+    if data.status:
         await power_on()
     else:
         await power_off()
