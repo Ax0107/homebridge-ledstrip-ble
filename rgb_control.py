@@ -13,6 +13,8 @@ CLIENT = None
 UU = None
 
 async def get_client_and_uu():
+    global CLIENT
+    global UU
     while CLIENT is None or UU is None:
         try:
             await connect()
@@ -73,6 +75,8 @@ async def blink(color):
 
 
 async def connect():
+    global CLIENT
+    global UU
     if CLIENT:
         if CLIENT.is_connected:
             print('[RGB] Already connected')
