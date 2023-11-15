@@ -13,6 +13,7 @@ Thread(target=run, args=(rgb_control_process_main(),)).start()
 @app.route('/set/', methods=['GET', 'POST'])
 def set_color_and_brightness():
     data = request.json
+    print(data.get('color', '-1'), data.get('brightness', '-1'))
     write_rgb_color_and_brightness(data.get('color', '-1'), data.get('brightness', '-1'))
 
     return jsonify({'status': 'ok'})
@@ -21,6 +22,7 @@ def set_color_and_brightness():
 @app.route('/set_state/', methods=['GET', 'POST'])
 def set_state():
     data = request.json
+    print('status:', data.get('status'))
     if data.get('status') == 'on':
         write_power_on()
     else:
