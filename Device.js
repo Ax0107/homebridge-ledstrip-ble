@@ -88,14 +88,14 @@ module.exports = class Device {
     await this.peripheral.connectAsync();
     console.log('[OK] Connected');
     this.connected = true;
-    console.log('Trying discover characteristics');
-    await this.peripheral.discoverAllServicesAndCharacteristics(callback_);
+    console.log('Discovering characteristics...');
+    // await this.peripheral.discoverAllServicesAndCharacteristics(callback_);
     const { characteristics } =
       await this.peripheral.discoverSomeServicesAndCharacteristicsAsync(
         ["fff0"],
         ["fff3"]
       );
-    console.log(characteristics);
+    console.log('SET UP WRITE CHARACTERISTICS!', characteristics);
     this.write = characteristics[0];
   }
 
