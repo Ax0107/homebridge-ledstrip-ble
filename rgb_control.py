@@ -1,6 +1,7 @@
 import sys
 import time
 import traceback
+from typing import List
 
 import numpy as np
 from bleak import BleakScanner, BleakClient
@@ -9,7 +10,7 @@ import platform
 from bleak.exc import BleakDeviceNotFoundError, BleakDBusError
 
 
-CLIENT = None
+CLIENT: List[BleakClient, None] = None
 UU = None
 
 async def get_client_and_uu():
@@ -73,15 +74,23 @@ async def blink(color):
 
 
 async def connect():
-    print('[RGB] STARTING RGB CONTROL MODULE')
+    if CLIENT:
+        if CLIENT.is_connected:
+            print('[RGB] Already connected')
+            return
+        else:
+            print('[RGB] Disconnect')
+            CLIENT = None
+            UU = None
+            
+    print('[RGB] INIT CONNECTING...')
     scanner = BleakScanner()
-    
-    # try:
-    print(f'[RGB] discovering...')
+
     try:
         addresses = await scanner.discover(timeout=10)
     except BleakDBusError:
         return
+    print(f'[RGB] discovering...')
     address = None
     for device in addresses:
         print(device.address, device.name)
