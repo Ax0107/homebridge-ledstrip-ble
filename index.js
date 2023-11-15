@@ -38,6 +38,8 @@ function LedStrip(log, config, api) {
   if (!this.config.uuid) return;
   this.uuid = this.config.uuid;
 
+  this.device = new Device(this.uuid);
+
 }
 
 LedStrip.prototype = {
