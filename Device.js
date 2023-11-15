@@ -73,13 +73,13 @@ module.exports = class Device {
   }
 
   async set_power(status) {
-    console.log("Write:", buffer);
+    console.log("Write power:", status);
     remoteSetPower(status);
   }
 
   async set_brightness(level) {
     if (level > 100 || level < 0) return;
-    console.log("Write:", buffer);
+    console.log("Write brightness:", level);
     remoteSetColor(-1, level);
   }
 
@@ -87,8 +87,7 @@ module.exports = class Device {
     const rhex = ("0" + r.toString(16)).slice(-2);
     const ghex = ("0" + g.toString(16)).slice(-2);
     const bhex = ("0" + b.toString(16)).slice(-2);
-    const buffer = Buffer.from(`7e000503${rhex}${ghex}${bhex}00ef`, "hex");
-    console.log("Write:", buffer);
+    console.log("Write color:", `${rhex}${ghex}${bhex}`);
     remoteSetColor(`${rhex}${ghex}${bhex}`, -1);
   }
 
