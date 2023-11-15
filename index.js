@@ -41,12 +41,12 @@ function LedStrip(log, config, api) {
   this.log('Device UUID:', this.uuid);
 
   this.device = new Device(this.uuid);
-  this.device.connectAndGetWriteCharacteristics();
+  //this.device.connectAndGetWriteCharacteristics();
 }
 
 LedStrip.prototype = {
   getServices: function () {
-    this.device.connectAndGetWriteCharacteristics();
+    //this.device.connectAndGetWriteCharacteristics();
     if (!this.bulb) return [];
     this.log('Homekit asked to report service');
     const infoService = new Service.AccessoryInformation();
@@ -54,43 +54,43 @@ LedStrip.prototype = {
     return [infoService, this.bulb];
   },
   getPower: function (callback) {
-    this.device.connectAndGetWriteCharacteristics();
+    //this.device.connectAndGetWriteCharacteristics();
     this.log('Homekit Asked Power State', this.device.connected);
     callback(null, this.device.power);
   },
   setPower: function (on, callback) {
-    this.device.connectAndGetWriteCharacteristics();
+    //this.device.connectAndGetWriteCharacteristics();
     this.log('Homekit Gave New Power State' + ' ' + on);
     this.device.set_power(on);
     callback(null);
   },
   getBrightness: function (callback) {
-    this.device.connectAndGetWriteCharacteristics();
+    //this.device.connectAndGetWriteCharacteristics();
     this.log('Homekit Asked Brightness');
     callback(null, this.device.brightness);
   },
   setBrightness: function (brightness, callback) {
-    this.device.connectAndGetWriteCharacteristics();
+    //this.device.connectAndGetWriteCharacteristics();
     this.log('Homekit Set Brightness', brightness);
     this.device.set_brightness(brightness);
     callback(null);
   },
   getHue: function (callback) {
-    this.device.connectAndGetWriteCharacteristics();
+    //this.device.connectAndGetWriteCharacteristics();
     callback(null, this.device.hue);
   },
   setHue: function (hue, callback) {
-    this.device.connectAndGetWriteCharacteristics();
+    //this.device.connectAndGetWriteCharacteristics();
     this.log('Homekit Set Hue', hue);
     this.device.set_hue(hue);
     callback(null);
   },
   getSaturation: function (callback) {
-    this.device.connectAndGetWriteCharacteristics();
+    //this.device.connectAndGetWriteCharacteristics();
     callback(null, this.device.saturation);
   },
   setSaturation: function (saturation, callback) {
-    this.device.connectAndGetWriteCharacteristics();
+    //this.device.connectAndGetWriteCharacteristics();
     this.log('Homekit Set Saturation', saturation);
     this.device.set_saturation(saturation);
     callback(null);
