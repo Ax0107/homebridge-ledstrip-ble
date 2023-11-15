@@ -81,7 +81,7 @@ module.exports = class Device {
     if (level > 100 || level < 0) return;
     console.log("Write brightness:", level);
     remoteSetColor(-1, level);
-    this.brightness = brightness;
+    this.brightness = level;
   }
 
   async set_rgb(r, g, b) {
