@@ -40,15 +40,22 @@ module.exports = class Device {
       console.log("State:", state);
       if (state == "poweredOn") {
         noble.startScanningAsync();
+        console.log('Starting scanning...');
       } else {
-        // if (this.peripheral) this.peripheral.disconnect();
+        try{
+          if (this.peripheral) this.peripheral.disconnect();
+        } catch (e) {
+          console.log(e);
+        }
+        
         this.connected = false;
       }
     });
 
     noble.on("discover", async (peripheral) => {
-      console.log(peripheral.uuid, peripheral.advertisement.localName);
+      console.log('Discovered:', peripheral.uuid, peripheral.advertisement.localName);
       if (peripheral.uuid == this.uuid) {
+        console.log('Found!')
         this.peripheral = peripheral;
         noble.stopScanning();
       }
@@ -56,12 +63,20 @@ module.exports = class Device {
   }
 
   async connectAndGetWriteCharacteristics() {
+
+    console.log('trying to connect and get write characteristics');
+    if (this.connected){
+      console.log('already connected');
+    }
     if (!this.peripheral) {
       noble.startScanningAsync();
       return;
     }
+    console.log('[OK] this.perepheral is not null');
     await this.peripheral.connectAsync();
+    console.log('[OK] Connected');
     this.connected = true;
+    console.log('Trying discover characteristics');
     const { characteristics } =
       await this.peripheral.discoverSomeServicesAndCharacteristicsAsync(
         ["fff0"],
@@ -72,7 +87,7 @@ module.exports = class Device {
   }
 
   async disconnect() {
-    return;
+    console.log('disconnecting...');
     if (this.peripheral) {
       await this.peripheral.disconnectAsync();
       this.connected = false;
@@ -92,6 +107,8 @@ module.exports = class Device {
         this.power = status;
         this.disconnect();
       });
+    } else {
+      console.log('No this.write');
     }
   }
 
@@ -107,6 +124,8 @@ module.exports = class Device {
         this.brightness = level;
         this.disconnect();
       });
+    } else {
+      console.log('No this.write');
     }
   }
 
@@ -122,6 +141,8 @@ module.exports = class Device {
         if (err) console.log("Error:", err);
         this.disconnect();
       });
+    } else {
+      console.log('No this.write');
     }
   }
 
@@ -132,6 +153,8 @@ module.exports = class Device {
       const rgb = hslToRgb(hue / 360, this.saturation / 100, this.l);
       this.set_rgb(rgb[0], rgb[1], rgb[2]);
       this.disconnect();
+    } else {
+      console.log('No this.write');
     }
   }
 
@@ -142,6 +165,8 @@ module.exports = class Device {
       const rgb = hslToRgb(this.hue / 360, saturation / 100, this.l);
       this.set_rgb(rgb[0], rgb[1], rgb[2]);
       this.disconnect();
+    } else {
+      console.log('No this.write');
     }
   }
 };
