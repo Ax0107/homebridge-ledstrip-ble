@@ -106,6 +106,7 @@ async def connect():
         print('[RGB] No RGB-tape. Trying reconnect...')
     try:
         CLIENT = BleakClient(address)
+        await CLIENT.connect()
         s = CLIENT.services
         UU = s.get_characteristic(13)
     except BleakDeviceNotFoundError:
