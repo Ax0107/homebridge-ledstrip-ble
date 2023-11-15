@@ -1,4 +1,6 @@
+import sys
 import time
+import traceback
 
 import numpy as np
 from bleak import BleakScanner, BleakClient
@@ -72,6 +74,8 @@ async def main():
                 await power_on(client, uu)
 
                 while True:
+                    if not client.is_connected:
+                        break
                     try:
                         with open('color.txt', 'r') as f:
                             l = f.readline()
@@ -105,8 +109,9 @@ async def main():
                                 color_s = value[0:2], value[2:4], value[4:]
                                 print(f'Setting up color: {color} {color_s}')
                                 r, g, b = [int(i, 16) for i in color_s]
-                            except:
+                            except Exception as e:
                                 print('[RGB] Error in setting color')
+                                traceback.print_exc(file=sys.stdout)
                             await set_color((r, g, b), client, uu)
                         elif brightness not in [-100, current_brightness, 'ON', 'OFF']:
                             try:
@@ -120,19 +125,23 @@ async def main():
 
                                 print(f'Setting up brightness: {value}')
                                 await set_brightness(value, client, uu)
-                            except:
+                            except Exception as e:
                                 print('[RGB] Error in setting brightness')
+                                traceback.print_exc(file=sys.stdout)
                     except Exception as e:
                         print(f'Error setting rgb: {e}')
+                        traceback.print_exc(file=sys.stdout)
                         time.sleep(5)
                         continue
                     reset()
                     time.sleep(0.1)
         except BleakDeviceNotFoundError:
             print('Could not connect to RGB device. Retrying in 5 secs...')
+            traceback.print_exc(file=sys.stdout)
             time.sleep(5)
         except Exception as e:
             print(f'Error: {e}')
+            traceback.print_exc(file=sys.stdout)
             time.sleep(5)
 
 def reset():
