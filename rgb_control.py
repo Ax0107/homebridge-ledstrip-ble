@@ -155,6 +155,14 @@ def write_brightness(brightness):
         f.flush()
         f.close()
 
+
+def write_rgb_color_and_brightness(color, brightness):
+    with open('color.txt', 'w') as f:
+        f.write(f'{color} {brightness}')
+        f.flush()
+        f.close()
+
+
 def write_power_off():
     with open('color.txt', 'w') as f:
         f.write(f'OFF OFF')

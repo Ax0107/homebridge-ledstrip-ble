@@ -1,5 +1,5 @@
 
-from rgb_control import main as rgb_control_process_main
+from rgb_control import main as rgb_control_process_main, write_power_off, write_power_on, write_rgb_color, write_rgb_color_and_brightness
 from threading import Thread
 from asyncio import run
 from flask import Flask, request, jsonify
@@ -12,16 +12,19 @@ Thread(target=run, args=(rgb_control_process_main(),)).start()
 
 @app.route('/set/', methods=['GET', 'POST'])
 def set_color_and_brightness():
-    print(request.data)
-    print(request.args)
+    data = request.json
+    write_rgb_color_and_brightness(data.get('color', '-1'), data.get('brightness', '-1'))
+
     return jsonify({'status': 'ok'})
 
 
 @app.route('/set_state/', methods=['GET', 'POST'])
 def set_state():
-    print(request.data)
-    print(request.args)
-    print(request.json)
+    data = request.json
+    if data.get('status') == 'on':
+        write_power_on()
+    else:
+        write_power_off()
     return jsonify({'status': 'ok'})
 
 
