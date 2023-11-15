@@ -1,6 +1,6 @@
 {
     "name": "@ax0107/homebridge-ledstrip-ble",
-    "version": "1.4.5a",
+    "version": "1.4.5",
     "displayName": "Homebridge Ledstrip BLE",
     "description": "",
     "main": "index.js",
