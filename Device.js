@@ -24,6 +24,10 @@ function hslToRgb(h, s, l) {
 
   return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
+function callback_(error, services, characteristics) {
+  console.log('ALL', error, services, characteristics);
+  
+}
 
 module.exports = class Device {
   constructor(uuid) {
@@ -57,12 +61,14 @@ module.exports = class Device {
       if (peripheral.uuid == this.uuid) {
         console.log('Found!')
         this.peripheral = peripheral;
-        await this.peripheral.connectAsync();
+        await peripheral.connectAsync();
         console.log('Connected!');
         noble.stopScanning();
       }
     });
   }
+
+
 
   async connectAndGetWriteCharacteristics() {
 
@@ -83,6 +89,7 @@ module.exports = class Device {
     console.log('[OK] Connected');
     this.connected = true;
     console.log('Trying discover characteristics');
+    await this.peripheral.discoverAllServicesAndCharacteristics(callback_);
     const { characteristics } =
       await this.peripheral.discoverSomeServicesAndCharacteristicsAsync(
         ["fff0"],
