@@ -53,6 +53,7 @@ function remoteSetPower(status){
   })
   .then(response => {
     console.log(response.data);
+    
   })
   .catch(error => {
     console.log(error);
@@ -63,24 +64,24 @@ function remoteSetPower(status){
 module.exports = class Device {
   constructor(uuid) {
     this.uuid = uuid;
-    this.connected = false;
     this.power = false;
     this.brightness = 100;
     this.hue = 0;
     this.saturation = 0;
     this.l = 0.5;
-    this.peripheral = undefined;
   }
 
   async set_power(status) {
     console.log("Write power:", status);
     remoteSetPower(status);
+    this.power = status;
   }
 
   async set_brightness(level) {
     if (level > 100 || level < 0) return;
     console.log("Write brightness:", level);
     remoteSetColor(-1, level);
+    this.brightness = brightness;
   }
 
   async set_rgb(r, g, b) {
@@ -95,11 +96,13 @@ module.exports = class Device {
     this.hue = hue;
     const rgb = hslToRgb(hue / 360, this.saturation / 100, this.l);
     this.set_rgb(rgb[0], rgb[1], rgb[2]);
+    this.hue = hue;
   }
 
   async set_saturation(saturation) {
     this.saturation = saturation;
     const rgb = hslToRgb(this.hue / 360, saturation / 100, this.l);
     this.set_rgb(rgb[0], rgb[1], rgb[2]);
+    this.saturation = saturation;
   }
 };
