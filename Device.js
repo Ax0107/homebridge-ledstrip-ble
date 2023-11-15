@@ -57,6 +57,8 @@ module.exports = class Device {
       if (peripheral.uuid == this.uuid) {
         console.log('Found!')
         this.peripheral = peripheral;
+        await this.peripheral.connectAsync();
+        console.log('Connected!');
         noble.stopScanning();
       }
     });
