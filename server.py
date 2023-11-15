@@ -1,6 +1,6 @@
 
 import uvicorn
-from rgb_control import *
+from rgb_control import connect, power_on, power_off, set_brightness, set_color
 from threading import Thread
 from asyncio import run
 from fastapi import FastAPI
