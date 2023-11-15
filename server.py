@@ -33,7 +33,7 @@ async def set_state(status: bool):
 
 if __name__ == "__main__":
     uvicorn.run(
-        "app",
+        "server:app",
         host="localhost",
         port=9988,
         reload=True,
