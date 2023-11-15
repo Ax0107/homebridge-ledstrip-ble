@@ -9,17 +9,21 @@ app = Flask(__name__)
 
 Thread(target=run, args=(rgb_control_process_main(),)).start()
 
-@app.route('/set', methods=['GET', 'POST'])
+
+@app.route('/set/', methods=['GET', 'POST'])
 def set_color_and_brightness():
     print(request.data)
+    print(request.args)
     return jsonify({'status': 'ok'})
 
 
-@app.route('/set_state', methods=['GET', 'POST'])
+@app.route('/set_state/', methods=['GET', 'POST'])
 def set_state():
     print(request.data)
+    print(request.args)
+    print(request.json)
     return jsonify({'status': 'ok'})
 
 
-
-app.run(host='0.0.0.0', port=9988, debug=True)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=9988, debug=False)
