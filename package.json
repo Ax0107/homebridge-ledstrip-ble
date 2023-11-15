@@ -1,6 +1,6 @@
 {
     "name": "@ax0107/homebridge-ledstrip-ble",
-    "version": "1.4.5",
+    "version": "1.4.5a",
     "displayName": "Homebridge Ledstrip BLE",
     "description": "",
     "main": "index.js",
@@ -22,7 +22,7 @@
         "type": "git",
         "url": "git+https://github.com/ax0107/homebridge-ledstrip-ble.git"
     },
-    "author": "",
+    "author": "Ax0107",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/ax0107/homebridge-ledstrip-ble/issues"
