@@ -11,7 +11,7 @@ To run without root access, go to homebridge terminal and type ```sudo setcap ca
 
 ## Installation
 
-`npm i @lyliya/homebridge-ledstrip-ble`
+`npm i @ax0107/homebridge-ledstrip-ble`
 
 ## Configuration
 ```js

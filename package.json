@@ -1,5 +1,5 @@
 {
-    "name": "@lyliya/homebridge-ledstrip-ble",
+    "name": "@ax0107/homebridge-ledstrip-ble",
     "version": "1.4.5",
     "displayName": "Homebridge Ledstrip BLE",
     "description": "",
@@ -20,12 +20,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Lyliya/homebridge-ledstrip-ble.git"
+        "url": "git+https://github.com/ax0107/homebridge-ledstrip-ble.git"
     },
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/Lyliya/homebridge-ledstrip-ble/issues"
+        "url": "https://github.com/ax0107/homebridge-ledstrip-ble/issues"
     },
-    "homepage": "https://github.com/Lyliya/homebridge-ledstrip-ble#readme"
+    "homepage": "https://github.com/ax0107/homebridge-ledstrip-ble#readme"
 }
