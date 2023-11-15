@@ -117,6 +117,7 @@ async def connect():
     try:
         CLIENT = BleakClient(address)
         await CLIENT.connect()
+        print('[RGB] SUCCESSFULL CONNECTION')
         s = CLIENT.services
         UU = s.get_characteristic(13)
     except BleakDeviceNotFoundError:
