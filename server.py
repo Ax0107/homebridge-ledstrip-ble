@@ -1,34 +1,40 @@
 
-from rgb_control import main as rgb_control_process_main, write_power_off, write_power_on, write_rgb_color, write_rgb_color_and_brightness
+import uvicorn
+from rgb_control import *
 from threading import Thread
 from asyncio import run
-from flask import Flask, request, jsonify
+from fastapi import FastAPI
 
-app = Flask(__name__)
-
-
-Thread(target=run, args=(rgb_control_process_main(),)).start()
+app = FastAPI()
 
 
-@app.route('/set/', methods=['GET', 'POST'])
-def set_color_and_brightness():
-    data = request.json
-    print(data.get('color', '-1'), data.get('brightness', '-1'))
-    write_rgb_color_and_brightness(data.get('color', '-1'), data.get('brightness', '-1'))
-
-    return jsonify({'status': 'ok'})
+Thread(target=run, args=(connect(),)).start()
 
 
-@app.route('/set_state/', methods=['GET', 'POST'])
-def set_state():
-    data = request.json
-    print('status:', data.get('status'))
-    if data.get('status') == 'on':
-        write_power_on()
+@app.post('/set/')
+async def set_color_and_brightness(color: str, brightness: str):
+    
+    print(color, brightness)
+    await set_color(color)
+    await set_brightness(brightness)
+    return {'status': 'ok'}
+
+
+@app.post('/set_state/', methods=['GET', 'POST'])
+async def set_state(status: bool):
+    
+    print('status:', status)
+    if status:
+        await power_on()
     else:
-        write_power_off()
-    return jsonify({'status': 'ok'})
+        await power_off()
+    return {'status': 'ok'}
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=9988, debug=False)
+    uvicorn.run(
+        "src.transport:app",
+        host="localhost",
+        port=9988,
+        reload=True,
+    )

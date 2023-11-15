@@ -14,7 +14,7 @@ To run without root access, go to homebridge terminal and type ```sudo setcap ca
  
 You also need to start python script:
 `python3 server.py`
-(requirements: bleak, flask, numpy libraries)
+(requirements: bleak, fastapi, numpy libraries)
 
 ## Configuration
 ```js
