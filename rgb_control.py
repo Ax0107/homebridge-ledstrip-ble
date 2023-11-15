@@ -131,7 +131,6 @@ async def main():
                     except Exception as e:
                         print(f'Error setting rgb: {e}')
                         traceback.print_exc(file=sys.stdout)
-                        time.sleep(5)
                         continue
                     reset()
                     time.sleep(0.1)
