@@ -21,3 +21,5 @@ def set_state():
     return jsonify({'status': 'ok'})
 
 
+
+app.run(host='0.0.0.0', port=9099, debug=True)
