@@ -79,6 +79,16 @@ module.exports = class Device {
     console.log('trying to connect and get write characteristics');
     if (this.connected){
       console.log('already connected');
+      if(!this.write){
+        const { characteristics } =
+        await this.peripheral.discoverSomeServicesAndCharacteristicsAsync(
+            ["fff0"],
+            ["fff3"]
+          );
+        console.log('SET UP WRITE CHARACTERISTICS!', characteristics);
+        this.write = characteristics[0];
+        return;
+      }
     }
     if (!this.peripheral) {
       try {
