@@ -20,7 +20,7 @@ async def set_color_and_brightness(color: str, brightness: str):
     return {'status': 'ok'}
 
 
-@app.post('/set_state/', methods=['GET', 'POST'])
+@app.post('/set_state/')
 async def set_state(status: bool):
     
     print('status:', status)
