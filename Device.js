@@ -59,10 +59,14 @@ module.exports = class Device {
     noble.on("discover", async (peripheral) => {
       console.log('Discovered:', peripheral.uuid, peripheral.advertisement.localName);
       if (peripheral.uuid == this.uuid) {
-        console.log('Found!')
-        this.peripheral = peripheral;
-        await peripheral.connectAsync();
-        console.log('Connected!');
+        if (!this.connected) {
+          console.log('Found!')
+          this.peripheral = peripheral;
+          await peripheral.connectAsync();
+          console.log('Connected!');
+        } else {
+          console.log('Alredy connected')
+        }
         noble.stopScanning();
       }
     });
