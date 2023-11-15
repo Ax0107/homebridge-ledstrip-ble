@@ -15,6 +15,16 @@ UU = None
 async def get_client_and_uu():
     global CLIENT
     global UU
+    
+    if CLIENT:
+        if CLIENT.is_connected:
+            print('[RGB] Already connected')
+            return
+        else:
+            print('[RGB] Disconnect')
+            CLIENT = None
+            UU = None
+    
     while CLIENT is None or UU is None:
         try:
             await connect()
