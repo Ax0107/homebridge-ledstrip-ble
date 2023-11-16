@@ -118,7 +118,7 @@ async def connect():
         SCANNER = BleakScanner()
         
     try:
-        addresses = await SCANNER.discover(timeout=3)
+        addresses = await SCANNER.discover(timeout=5)
     except BleakDBusError:
         traceback.print_exc(file=sys.stdout)
         CONNECTING = False
