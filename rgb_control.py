@@ -12,7 +12,7 @@ from bleak.exc import BleakDeviceNotFoundError, BleakDBusError
 CLIENT = None
 UU = None
 CONNECTING = False
-SCANNER = BleakScanner()
+SCANNER = None
 Attempts = 0
 
 async def get_client_and_uu():
@@ -114,6 +114,9 @@ async def connect():
     print('[RGB] INIT CONNECTING...')
     CONNECTING = True
     
+    if SCANNER is None:
+        SCANNER = BleakScanner()
+        
     try:
         addresses = await SCANNER.discover(timeout=3)
     except BleakDBusError:
