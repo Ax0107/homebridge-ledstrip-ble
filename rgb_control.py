@@ -108,7 +108,7 @@ async def connect():
     CONNECTING = True
     
     try:
-        addresses = await SCANNER.discover(timeout=10)
+        addresses = await SCANNER.discover(timeout=5)
     except BleakDBusError:
         return
     print(f'[RGB] discovering...')
