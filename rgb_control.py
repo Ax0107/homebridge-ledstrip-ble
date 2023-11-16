@@ -13,6 +13,7 @@ CLIENT = None
 UU = None
 CONNECTING = False
 SCANNER = BleakScanner()
+Attempts = 0
 
 async def get_client_and_uu():
     global CLIENT
@@ -92,8 +93,14 @@ async def connect():
     global UU
     global CONNECTING
     global SCANNER
+    global Attempts
     if CONNECTING:
-        return
+        print('[RGB] already started connect')
+        Attempts += 1
+        if Attempts == 10:
+            CONNECTING = False
+        else:
+            return
     
     if CLIENT:
         if CLIENT.is_connected:
