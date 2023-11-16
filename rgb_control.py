@@ -95,7 +95,7 @@ async def connect():
     global SCANNER
     global Attempts
     if CONNECTING:
-        print('[RGB] already started connect')
+        print('[RGB] already started connect:', Attempts)
         Attempts += 1
         if Attempts >= 15:
             
