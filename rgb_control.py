@@ -117,6 +117,7 @@ async def connect():
     try:
         addresses = await SCANNER.discover(timeout=3)
     except BleakDBusError:
+        traceback.print_exc(file=sys.stdout)
         CONNECTING = False
         return
     print(f'[RGB] discovering...')
@@ -140,7 +141,6 @@ async def connect():
     except BleakDeviceNotFoundError:
         print('Could not connect to RGB device. Retrying in 5 secs...')
         traceback.print_exc(file=sys.stdout)
-        time.sleep(5)
     except Exception as e:
         print(f'Error: {e}')
         traceback.print_exc(file=sys.stdout)
