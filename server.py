@@ -9,7 +9,9 @@ from pydantic import BaseModel
 app = FastAPI()
 
 class CBModel(BaseModel):
-    color: str
+    r: int
+    g: int
+    b: int
     brightness: int
     
 class SModel(BaseModel):
@@ -19,9 +21,11 @@ class SModel(BaseModel):
 @app.post('/set/')
 async def set_color_and_brightness(data: CBModel):
     
-    print(data.color, data.brightness)
-    await set_color(data.color)
-    await set_brightness(data.brightness)
+    print(data.r,data.g,data.b, data.brightness)
+    await set_color(data.r, data.g, data.b)
+    if data.brightness != -1:
+        await set_brightness(data.brightness)
+        
     return {'status': 'ok'}
 
 

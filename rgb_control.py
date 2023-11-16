@@ -55,12 +55,13 @@ async def power_off():
     await client.write_gatt_char(uu, value, response=False)
 
 
-async def set_color(color):
+async def set_color(r, g, b):
     client, uu = await get_client_and_uu()
     if not client or not uu:
         return
+    r, g, b = [int(i, 16) for i in (r, g, b)]
     await power_on(client, uu)
-    value = bytes([0x7e, 0x00, 0x05, 0x03, color[0], color[1], color[2], 0x00, 0xef])
+    value = bytes([0x7e, 0x00, 0x05, 0x03, r, g, b, 0x00, 0xef])
     await client.write_gatt_char(uu, value, response=False)
 
 
