@@ -148,3 +148,4 @@ async def connect():
         print(f'Error: {e}')
         traceback.print_exc(file=sys.stdout)
     CONNECTING = False
+    SCANNER = None
