@@ -97,7 +97,7 @@ async def connect():
     if CONNECTING:
         print('[RGB] already started connect')
         Attempts += 1
-        if Attempts > 15:
+        if Attempts >= 15:
             CONNECTING = False
             Attempts = 0
         else:
