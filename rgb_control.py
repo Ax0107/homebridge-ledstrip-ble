@@ -11,6 +11,7 @@ from bleak.exc import BleakDeviceNotFoundError, BleakDBusError
 
 CLIENT = None
 UU = None
+CONNECTING = False
 
 async def get_client_and_uu():
     global CLIENT
@@ -31,8 +32,7 @@ async def get_client_and_uu():
             except BleakDBusError:
                 print('Already in progress...')
     except:
-        return None, None
-    return CLIENT, UU
+        return
 
 # ELK-BLEDOM
 if platform.system().lower() == 'macos':
@@ -41,55 +41,50 @@ else:
     address = "BE:96:80:00:05:79"
 
 async def power_on():
-    client, uu = await get_client_and_uu()
-    if not client or not uu:
-        return
+    global CLIENT
+    global UU
+    await get_client_and_uu()
+    
     value = bytes([0x7e, 0x00, 0x04, 0xf0, 0x00, 0x01, 0xff, 0x00, 0xef])
-    await client.write_gatt_char(uu, value, response=False)
+    await CLIENT.write_gatt_char(UU, value, response=False)
 
 async def power_off():
-    client, uu = await get_client_and_uu()
-    if not client or not uu:
-        return
+    global CLIENT
+    global UU
+    await get_client_and_uu()
+    
     value = bytes([0x7e, 0x00, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00, 0xef])
-    await client.write_gatt_char(uu, value, response=False)
+    await CLIENT.write_gatt_char(UU, value, response=False)
 
 
 async def set_color(r, g, b):
-    client, uu = await get_client_and_uu()
-    if not client or not uu:
-        return
+    global CLIENT
+    global UU
+    await get_client_and_uu()
+    
     r, g, b = [int(i, 16) for i in (r, g, b)]
-    await power_on(client, uu)
+    await power_on(CLIENT, UU)
     value = bytes([0x7e, 0x00, 0x05, 0x03, r, g, b, 0x00, 0xef])
-    await client.write_gatt_char(uu, value, response=False)
+    await CLIENT.write_gatt_char(UU, value, response=False)
 
 
 async def set_brightness(value):
-    client, uu = await get_client_and_uu()
-    if not client or not uu:
-        return
-    await power_on(client, uu)
+    global CLIENT
+    global UU
+    await get_client_and_uu()
+    
+    await power_on(CLIENT, UU)
     value = bytes([0x7e, 0x00, 0x01, value, 0x00, 0x00, 0x00, 0x00, 0xef])
-    await client.write_gatt_char(UU, value, response=False)
-
-
-async def blink(color):
-    client, uu = await get_client_and_uu()
-    if not client or not uu:
-        return
-    await set_color(color, client, uu)
-    time.sleep(1)
-    for _ in range(3):
-        for i in range(0, 64, 2):
-            await set_brightness(i, client, uu)
-        for i in range(64, 0, -2):
-            await set_brightness(i,  client, uu)
+    await CLIENT.write_gatt_char(UU, value, response=False)
 
 
 async def connect():
     global CLIENT
     global UU
+    global CONNECTING
+    if CONNECTING:
+        return
+    
     if CLIENT:
         if CLIENT.is_connected:
             print('[RGB] Already connected')
@@ -100,8 +95,9 @@ async def connect():
             UU = None
             
     print('[RGB] INIT CONNECTING...')
+    CONNECTING = True
     scanner = BleakScanner()
-
+    
     try:
         addresses = await scanner.discover(timeout=10)
     except BleakDBusError:
@@ -114,6 +110,7 @@ async def connect():
             print('[RGB] DISCOVERED RGB-TAPE ELK-BLEDOM')
             address = device.address
             break
+    
     print(f'[RGB] Target address: {address}')
     if address is None:
         print('[RGB] No RGB-tape. Trying reconnect...')
@@ -130,4 +127,4 @@ async def connect():
     except Exception as e:
         print(f'Error: {e}')
         traceback.print_exc(file=sys.stdout)
-
+    CONNECTING = False
