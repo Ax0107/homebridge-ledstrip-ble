@@ -45,6 +45,8 @@ async def power_on():
     global CLIENT
     global UU
     await get_client_and_uu()
+    if CLIENT is None or UU is None:
+        return
     
     value = bytes([0x7e, 0x00, 0x04, 0xf0, 0x00, 0x01, 0xff, 0x00, 0xef])
     await CLIENT.write_gatt_char(UU, value, response=False)
@@ -53,6 +55,8 @@ async def power_off():
     global CLIENT
     global UU
     await get_client_and_uu()
+    if CLIENT is None or UU is None:
+        return
     
     value = bytes([0x7e, 0x00, 0x04, 0x00, 0x00, 0x00, 0xff, 0x00, 0xef])
     await CLIENT.write_gatt_char(UU, value, response=False)
@@ -62,6 +66,8 @@ async def set_color(r, g, b):
     global CLIENT
     global UU
     await get_client_and_uu()
+    if CLIENT is None or UU is None:
+        return
     
     r, g, b = [int(i, 16) for i in (r, g, b)]
     await power_on(CLIENT, UU)
@@ -73,6 +79,8 @@ async def set_brightness(value):
     global CLIENT
     global UU
     await get_client_and_uu()
+    if CLIENT is None or UU is None:
+        return
     
     await power_on(CLIENT, UU)
     value = bytes([0x7e, 0x00, 0x01, value, 0x00, 0x00, 0x00, 0x00, 0xef])
