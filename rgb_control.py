@@ -98,45 +98,43 @@ async def connect():
         print('[RGB] already started connect:', Attempts)
         Attempts += 1
         if Attempts >= 15:
-            
             exit(1)
         else:
             return
-    
-    if CLIENT:
-        if CLIENT.is_connected:
-            print('[RGB] Already connected')
-            return
-        else:
-            print('[RGB] Disconnected')
-            CLIENT = None
-            UU = None
-            
-    print('[RGB] INIT CONNECTING...')
-    CONNECTING = True
-    
-    if SCANNER is None:
-        SCANNER = BleakScanner()
+    try:
+        if CLIENT:
+            if CLIENT.is_connected:
+                print('[RGB] Already connected')
+                return
+            else:
+                print('[RGB] Disconnected')
+                CLIENT = None
+                UU = None
+                
+        print('[RGB] INIT CONNECTING...')
+        CONNECTING = True
         
-    try:
-        addresses = await SCANNER.discover(timeout=5)
-    except BleakDBusError:
-        traceback.print_exc(file=sys.stdout)
-        CONNECTING = False
-        return
-    print(f'[RGB] discovering...')
-    address = None
-    for device in addresses:
-        print(device.address, device.name)
-        if device.name and 'ELK-BLEDOM' in device.name:
-            print('[RGB] DISCOVERED RGB-TAPE ELK-BLEDOM')
-            address = device.address
-            break
-    
-    print(f'[RGB] Target address: {address}')
-    if address is None:
-        print('[RGB] No RGB-tape. Trying reconnect...')
-    try:
+        if SCANNER is None:
+            SCANNER = BleakScanner()
+            
+        try:
+            addresses = await SCANNER.discover(timeout=5)
+        except BleakDBusError:
+            traceback.print_exc(file=sys.stdout)
+            CONNECTING = False
+            return
+        print(f'[RGB] discovering...')
+        address = None
+        for device in addresses:
+            print(device.address, device.name)
+            if device.name and 'ELK-BLEDOM' in device.name:
+                print('[RGB] DISCOVERED RGB-TAPE ELK-BLEDOM')
+                address = device.address
+                break
+        
+        print(f'[RGB] Target address: {address}')
+        if address is None:
+            print('[RGB] No RGB-tape. Trying reconnect...')
         CLIENT = BleakClient(address)
         await CLIENT.connect()
         print('[RGB] SUCCESSFULL CONNECTION')
@@ -148,5 +146,7 @@ async def connect():
     except Exception as e:
         print(f'Error: {e}')
         traceback.print_exc(file=sys.stdout)
-    CONNECTING = False
-    SCANNER = None
+    finally:
+        CONNECTING = False
+        SCANNER = None
+        Attempts = 0
