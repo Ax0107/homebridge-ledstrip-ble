@@ -21,7 +21,7 @@ class SModel(BaseModel):
 
 
 @app.post('/set/color')
-async def set_color(data: CModel):
+async def set_color_api(data: CModel):
     
     print(data.r,data.g,data.b)
     await set_color(data.r, data.g, data.b)
@@ -29,7 +29,7 @@ async def set_color(data: CModel):
 
 
 @app.post('/set/brightness')
-async def set_brightness(data: BModel):
+async def set_brightness_api(data: BModel):
     print(data.brightness)
     await set_brightness(data.brightness)    
     return {'status': 'ok'}
