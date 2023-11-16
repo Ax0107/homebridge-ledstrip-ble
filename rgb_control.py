@@ -90,7 +90,7 @@ async def connect():
             print('[RGB] Already connected')
             return
         else:
-            print('[RGB] Disconnect')
+            print('[RGB] Disconnected')
             CLIENT = None
             UU = None
             

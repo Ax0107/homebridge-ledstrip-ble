@@ -24,13 +24,30 @@ function hslToRgb(h, s, l) {
 
   return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 }
-function remoteSetColor(color, brightness){
+function remoteSetColor(r, g, b){
 
   axios({
     method: 'post',
-    url: 'http://localhost:9988/set/',
+    url: 'http://localhost:9988/set/color',
     data: {
-      color: color,
+      r: r,
+      g: g,
+      b: b
+    }
+  })
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.log(error);
+  });
+}
+function remoteSetBrightness(brightness){
+
+  axios({
+    method: 'post',
+    url: 'http://localhost:9988/set/brightness',
+    data: {
       brightness: brightness
     }
   })
@@ -80,16 +97,13 @@ module.exports = class Device {
   async set_brightness(level) {
     if (level > 100 || level < 0) return;
     console.log("Write brightness:", level);
-    remoteSetColor(-1, level);
+    remoteSetBrightness(level);
     this.brightness = level;
   }
 
   async set_rgb(r, g, b) {
-    const rhex = ("0" + r.toString(16)).slice(-2);
-    const ghex = ("0" + g.toString(16)).slice(-2);
-    const bhex = ("0" + b.toString(16)).slice(-2);
-    console.log("Write color:", `${rhex}${ghex}${bhex}`);
-    remoteSetColor(`${rhex}${ghex}${bhex}`, -1);
+    console.log("Write color:", r, g, b);
+    remoteSetColor(r, g, b);
   }
 
   async set_hue(hue) {
