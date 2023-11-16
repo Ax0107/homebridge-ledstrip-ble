@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import traceback
@@ -27,6 +28,9 @@ async def get_client_and_uu():
                 print('[RGB] Disconnect')
                 CLIENT = None
                 UU = None
+                os.system('bluetoothctl power off')
+                time.sleep(1)
+                os.system('bluetoothctl power on')
         
         while CLIENT is None or UU is None:
             try:
