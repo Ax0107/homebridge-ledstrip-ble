@@ -69,7 +69,7 @@ async def set_color(r, g, b):
     if CLIENT is None or UU is None:
         return
     
-    r, g, b = [int(i, 16) for i in (r, g, b)]
+    #r, g, b = [int(i, 16) for i in (r, g, b)]
     await power_on(CLIENT, UU)
     value = bytes([0x7e, 0x00, 0x05, 0x03, r, g, b, 0x00, 0xef])
     await CLIENT.write_gatt_char(UU, value, response=False)
