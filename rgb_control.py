@@ -70,7 +70,7 @@ async def set_color(r, g, b):
         return
     
     #r, g, b = [int(i, 16) for i in (r, g, b)]
-    await power_on(CLIENT, UU)
+    await power_on()
     value = bytes([0x7e, 0x00, 0x05, 0x03, r, g, b, 0x00, 0xef])
     await CLIENT.write_gatt_char(UU, value, response=False)
 
@@ -82,7 +82,7 @@ async def set_brightness(value):
     if CLIENT is None or UU is None:
         return
     
-    await power_on(CLIENT, UU)
+    await power_on()
     value = bytes([0x7e, 0x00, 0x01, value, 0x00, 0x00, 0x00, 0x00, 0xef])
     await CLIENT.write_gatt_char(UU, value, response=False)
 
@@ -108,7 +108,7 @@ async def connect():
     CONNECTING = True
     
     try:
-        addresses = await SCANNER.discover(timeout=5)
+        addresses = await SCANNER.discover(timeout=3)
     except BleakDBusError:
         return
     print(f'[RGB] discovering...')
